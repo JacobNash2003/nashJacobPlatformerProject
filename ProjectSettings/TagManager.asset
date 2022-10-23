@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Obstacle
+  - Ending
+  - Death
+  - level1
+  - level2
+  - level3
+  - BigDeath
   layers:
   - Default
   - TransparentFX
