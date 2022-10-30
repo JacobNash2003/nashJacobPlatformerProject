@@ -11,6 +11,8 @@ TagManager:
   - level2
   - level3
   - BigDeath
+  - Door2
+  - Door1
   layers:
   - Default
   - TransparentFX

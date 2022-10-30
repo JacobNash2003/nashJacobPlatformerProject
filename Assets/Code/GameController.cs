@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour
         StopWatch();
         StoppedTime();
     }
-    
+
     public void StopWatch()
     {
         Timer = Timer + Time.deltaTime;
@@ -60,6 +60,7 @@ public class GameController : MonoBehaviour
         if (Lives == 0)
         {
             LoseGame();
+            LoseLifeScreen.SetActive(false);
         }    
     }
 

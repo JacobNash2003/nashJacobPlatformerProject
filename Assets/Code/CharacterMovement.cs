@@ -8,12 +8,16 @@ public class CharacterMovement : MonoBehaviour
     public Rigidbody2D rb;
     public Vector2 JumpForce = new Vector2(0, 1250);
     private GameController gc;
+    private SpriteRenderer lg;
+    public GameObject TpLocation1;
+    public GameObject TpLocation2;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         gc = GameObject.FindObjectOfType<GameController>().GetComponent<GameController>();
+        lg = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -26,23 +30,25 @@ public class CharacterMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            transform.localScale = new Vector2(.75f, .75f);
+            transform.localScale = new Vector2(5f, 5f);
         }
 
         if (Input.GetKey("d"))
         {
             transform.Translate(Vector3.right * Speed * Time.deltaTime);
+            lg.flipX = false;
         }
 
         if (Input.GetKey("a"))
         {
             transform.Translate(Vector3.left * Speed * Time.deltaTime);
+            lg.flipX = true;
         }
 
         if(!Input.GetKey(KeyCode.LeftShift))
         {
-            transform.localScale = new Vector2(1f, 1f);
-        }
+            transform.localScale = new Vector2(10f, 10f);
+        }  
     }
     public void OnCollisionEnter2D(Collision2D collision)
     {
@@ -55,7 +61,7 @@ public class CharacterMovement : MonoBehaviour
        if (collision.gameObject.tag == "level2")
         {
             Destroy(collision.gameObject);
-            Speed += 10f;
+            Speed += 5f;
         }
 
        if (collision.gameObject.tag == "level3")
@@ -81,9 +87,14 @@ public class CharacterMovement : MonoBehaviour
             gc.WinGame();
         }
 
-       if (collision.gameObject.tag == "Obstacle")
+       if (collision.gameObject.tag == "Door1")
         {
-            print("mmmmmboooooooool");
+            transform.position = TpLocation1.transform.position;
+        }
+
+       if (collision.gameObject.tag == "Door2")
+        {
+            transform.position = TpLocation2.transform.position;
         }
     }
 }
