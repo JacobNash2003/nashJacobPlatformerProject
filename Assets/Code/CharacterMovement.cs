@@ -23,7 +23,7 @@ public class CharacterMovement : MonoBehaviour
         gameController = GameObject.FindObjectOfType<GameController>().GetComponent<GameController>();
         spriteRenderer = transform.GetComponent<SpriteRenderer>();
         boxCollider2d = GetComponent<BoxCollider2D>();
-        lightTimer = 15f;
+        lightTimer = 20f;
     }
 
     // Update is called once per frame
@@ -44,7 +44,7 @@ public class CharacterMovement : MonoBehaviour
             {
                 if (canDoubleJump)
                 {
-                    float jumpVelocity = 3f;
+                    float jumpVelocity = 2f;
                     rigidbody2d.velocity = Vector2.up * jumpVelocity;
                     canDoubleJump = false;
                 }
@@ -91,6 +91,7 @@ public class CharacterMovement : MonoBehaviour
         {
             Destroy(collision.gameObject);
             circleLight.SetActive(true);
+            lightTimer += 15;
         }
 
        if (collision.gameObject.tag == "level2")
