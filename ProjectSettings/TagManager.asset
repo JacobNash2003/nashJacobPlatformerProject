@@ -13,6 +13,11 @@ TagManager:
   - BigDeath
   - Door2
   - Door1
+  - BigDeath1
+  - BigDeath2
+  - Death1
+  - Death2
+  - Death3
   layers:
   - Default
   - TransparentFX
@@ -23,7 +28,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Platforms
   - 
   - 
   - 

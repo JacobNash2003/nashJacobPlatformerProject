@@ -12,10 +12,10 @@ public class GameController : MonoBehaviour
     public TMP_Text TextBoxT;
     public TMP_Text TextBoxL;
     public TMP_Text TextBoxFT;
-    public GameObject WinScreen;
-    public GameObject LoseScreen;
-    public GameObject LoseLifeScreen;
-    public GameObject SpawnLocation;
+    public GameObject winScreen;
+    public GameObject loseScreen;
+    public GameObject loseLifeScreen;
+    public GameObject spawnLocation;
     public GameObject Character;
     public GameObject Darkness;
 
@@ -35,8 +35,7 @@ public class GameController : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.R))
         {
-            Character.transform.position = SpawnLocation.transform.position;
-            LoseLifeScreen.SetActive(false);
+            loseLifeScreen.SetActive(false);
         }
         else if (Input.GetKey(KeyCode.Q))
         {
@@ -60,7 +59,7 @@ public class GameController : MonoBehaviour
         if (Lives == 0)
         {
             LoseGame();
-            LoseLifeScreen.SetActive(false);
+            loseLifeScreen.SetActive(false);
         }    
     }
 
@@ -75,22 +74,27 @@ public class GameController : MonoBehaviour
         Lives -= 2;
         TextBoxL.text = "Lives: " + Lives;
         ResetGame();
+        if (Lives == 0)
+        {
+            LoseGame();
+            loseLifeScreen.SetActive(false);
+        }
     }
 
     public void WinGame()
     {
-        WinScreen.SetActive(true);
+        winScreen.SetActive(true);
         Time.timeScale = 0;
     }
     public void LoseGame()
     {
-        LoseScreen.SetActive(true);
+        loseScreen.SetActive(true);
         Destroy(TextBoxT);
     }
 
     public void ResetGame()
     {
-        LoseLifeScreen.SetActive(true);
+        loseLifeScreen.SetActive(true);
     }
 
     public void StoppedTime()
