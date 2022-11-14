@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public float Speed = 0.5f;
+    public float Speed = 0.8f;
     public float lightTimer;
     private bool canDoubleJump;
     [SerializeField] private LayerMask platformsLayerMask;
-    public Rigidbody2D rigidbody2d;
+    private Rigidbody2D rigidbody2d;
     private GameController gameController;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider2d;
     public GameObject teleportLocation1;
     public GameObject teleportLocation2;
     public GameObject circleLight;
+    public AudioClip mainMusic;
+    public AudioClip jumpSound;
+    public AudioClip itemSound;
+    public AudioClip shrinkSound;
+    public AudioClip deathSound;
+    public AudioClip winSound;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +30,8 @@ public class CharacterMovement : MonoBehaviour
         spriteRenderer = transform.GetComponent<SpriteRenderer>();
         boxCollider2d = GetComponent<BoxCollider2D>();
         lightTimer = 20f;
+        transform.position = gameController.spawnLocation.transform.position;
+        AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0.30f);
     }
 
     // Update is called once per frame
@@ -39,14 +47,16 @@ public class CharacterMovement : MonoBehaviour
             {
                 float jumpVelocity = 3f;
                 rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position, 0.45f);
             }
             else 
             {
-                if (canDoubleJump)
-                {
-                    float jumpVelocity = 2f;
-                    rigidbody2d.velocity = Vector2.up * jumpVelocity;
-                    canDoubleJump = false;
+                 if (canDoubleJump)
+                 {
+                        float jumpVelocity = 3f;
+                        rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                        canDoubleJump = false;
+                        AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position, 0.45f);
                 }
             }
         }
@@ -54,6 +64,7 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             transform.localScale = new Vector2(.25f, .25f);
+            AudioSource.PlayClipAtPoint(shrinkSound, Camera.main.transform.position, 0.45f);
         }
 
         if (Input.GetKey("d"))
@@ -70,7 +81,7 @@ public class CharacterMovement : MonoBehaviour
 
         if(!Input.GetKey(KeyCode.LeftShift))
         {
-            transform.localScale = new Vector2(.90f, .90f);
+            transform.localScale = new Vector2(1f, 1f);
         }
 
         lightTimer = lightTimer - Time.deltaTime;
@@ -82,7 +93,7 @@ public class CharacterMovement : MonoBehaviour
 
     private bool IsGrounded()
     {
-        RaycastHit2D raycastHit2d = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down, 1f, platformsLayerMask);
+        RaycastHit2D raycastHit2d = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down, 0.1f, platformsLayerMask);
         return raycastHit2d.collider != null;
     }
     public void OnCollisionEnter2D(Collision2D collision)
@@ -92,24 +103,28 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             circleLight.SetActive(true);
             lightTimer += 15;
+            AudioSource.PlayClipAtPoint(itemSound, Camera.main.transform.position, .45f);
         }
 
        if (collision.gameObject.tag == "level2")
         {
             Destroy(collision.gameObject);
             Speed += 0.5f;
+            AudioSource.PlayClipAtPoint(itemSound, Camera.main.transform.position, .45f);
         }
 
        if (collision.gameObject.tag == "level3")
         {
             Destroy(collision.gameObject);
             gameController.IncreaseLife();
+            AudioSource.PlayClipAtPoint(itemSound, Camera.main.transform.position, .45f);
         }
 
        if (collision.gameObject.tag == "Death1")
         {
             Destroy(collision.gameObject);
             gameController.UpdateLives();
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
             transform.position = gameController.spawnLocation.transform.position;
         }
 
@@ -117,6 +132,7 @@ public class CharacterMovement : MonoBehaviour
         {
             Destroy(collision.gameObject);
             gameController.UpdateLives();
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
             transform.position = teleportLocation1.transform.position;
         }
 
@@ -124,6 +140,7 @@ public class CharacterMovement : MonoBehaviour
         {
             Destroy(collision.gameObject);
             gameController.UpdateLives();
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
             transform.position = teleportLocation2.transform.position;
         }
 
@@ -131,6 +148,7 @@ public class CharacterMovement : MonoBehaviour
         {
             Destroy(collision.gameObject);
             gameController.DecreaseLife();
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
             transform.position = gameController.spawnLocation.transform.position;
         }
 
@@ -138,6 +156,7 @@ public class CharacterMovement : MonoBehaviour
         {
             Destroy(collision.gameObject);
             gameController.DecreaseLife();
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
             transform.position = teleportLocation1.transform.position;
 
         }
@@ -145,6 +164,7 @@ public class CharacterMovement : MonoBehaviour
        if (collision.gameObject.tag == "Ending")
         {
             gameController.WinGame();
+            AudioSource.PlayClipAtPoint(winSound, Camera.main.transform.position, .45f);
         }
 
        if (collision.gameObject.tag == "Door1")
