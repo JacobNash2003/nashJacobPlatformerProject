@@ -18,6 +18,9 @@ TagManager:
   - Death1
   - Death2
   - Death3
+  - Door3
+  - Gold
+  - Secret
   layers:
   - Default
   - TransparentFX

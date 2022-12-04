@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour
     public void StopWatch()
     {
         Timer = Timer + Time.deltaTime;
-        TextBoxT.text = "Timer: " + Timer;
+        TextBoxT.text = "Timer: " + Timer.ToString("0.00");
     }
     public void UpdateLives()
     {
@@ -100,6 +100,6 @@ public class GameController : MonoBehaviour
     public void StoppedTime()
     {
         FTimer = FTimer + Time.deltaTime;
-        TextBoxFT.text = "FinalTime: " + FTimer;
+        TextBoxFT.text = "FinalTime: " + FTimer.ToString("0:00");
     }
 }

@@ -14,13 +14,16 @@ public class CharacterMovement : MonoBehaviour
     private BoxCollider2D boxCollider2d;
     public GameObject teleportLocation1;
     public GameObject teleportLocation2;
+    public GameObject teleportLocation3;
     public GameObject circleLight;
+    public Animator myAnimator;
     public AudioClip mainMusic;
     public AudioClip jumpSound;
     public AudioClip itemSound;
     public AudioClip shrinkSound;
     public AudioClip deathSound;
     public AudioClip winSound;
+    public AudioClip openSound;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +34,7 @@ public class CharacterMovement : MonoBehaviour
         boxCollider2d = GetComponent<BoxCollider2D>();
         lightTimer = 20f;
         transform.position = gameController.spawnLocation.transform.position;
-        AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0.30f);
+        AudioSource.PlayClipAtPoint(mainMusic, transform.position, 0.60f);
     }
 
     // Update is called once per frame
@@ -48,44 +51,56 @@ public class CharacterMovement : MonoBehaviour
                 float jumpVelocity = 3f;
                 rigidbody2d.velocity = Vector2.up * jumpVelocity;
                 AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position, 0.45f);
+                myAnimator.SetTrigger("Jump");
             }
-            else 
+            else
             {
-                 if (canDoubleJump)
-                 {
-                        float jumpVelocity = 3f;
-                        rigidbody2d.velocity = Vector2.up * jumpVelocity;
-                        canDoubleJump = false;
-                        AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position, 0.45f);
+                if (canDoubleJump)
+                {
+                    float jumpVelocity = 3f;
+                    rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                    canDoubleJump = false;
+                    AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position, 0.45f);
+                    myAnimator.SetTrigger("Jump");
                 }
             }
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            transform.localScale = new Vector2(.25f, .25f);
-            AudioSource.PlayClipAtPoint(shrinkSound, Camera.main.transform.position, 0.45f);
+            transform.localScale = new Vector2(.30f, .30f);
+            AudioSource.PlayClipAtPoint(shrinkSound, transform.position, 0.45f);
+            myAnimator.SetBool("Shrink", true);
         }
 
-        if (Input.GetKey("d"))
+        float direction = Input.GetAxis("Horizontal");
+        transform.Translate(direction * Vector2.right * Speed * Time.deltaTime);
+        if (direction == 0)
         {
-            transform.Translate(Vector3.right * Speed * Time.deltaTime);
-            spriteRenderer.flipX = false;
+            myAnimator.SetBool("Walk", false);
+        }
+        else
+        {
+            myAnimator.SetBool("Walk", true);
         }
 
-        if (Input.GetKey("a"))
+        if (direction < 0)
         {
-            transform.Translate(Vector3.left * Speed * Time.deltaTime);
             spriteRenderer.flipX = true;
+        }
+        else if( direction > 0)
+        {
+            spriteRenderer.flipX = false;
         }
 
         if(!Input.GetKey(KeyCode.LeftShift))
         {
             transform.localScale = new Vector2(1f, 1f);
+            myAnimator.SetBool("Shrink", false);
         }
 
         lightTimer = lightTimer - Time.deltaTime;
-        if (lightTimer <= 0f)
+        if (lightTimer == 0f)
         {
             circleLight.SetActive(false);
         }
@@ -103,21 +118,30 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             circleLight.SetActive(true);
             lightTimer += 15;
-            AudioSource.PlayClipAtPoint(itemSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(itemSound, transform.position, .45f);
         }
 
        if (collision.gameObject.tag == "level2")
         {
             Destroy(collision.gameObject);
             Speed += 0.5f;
-            AudioSource.PlayClipAtPoint(itemSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(itemSound, transform.position, .45f);
         }
 
        if (collision.gameObject.tag == "level3")
         {
             Destroy(collision.gameObject);
             gameController.IncreaseLife();
-            AudioSource.PlayClipAtPoint(itemSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(itemSound, transform.position, .45f);
+        }
+
+       if (collision.gameObject.tag == "Death")
+        {
+            Destroy(collision.gameObject);
+            gameController.UpdateLives();
+            AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
+            transform.position = gameController.spawnLocation.transform.position;
         }
 
        if (collision.gameObject.tag == "Death1")
@@ -125,7 +149,8 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             gameController.UpdateLives();
             AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
-            transform.position = gameController.spawnLocation.transform.position;
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
+            transform.position = teleportLocation1.transform.position;
         }
 
        if (collision.gameObject.tag == "Death2")
@@ -133,7 +158,8 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             gameController.UpdateLives();
             AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
-            transform.position = teleportLocation1.transform.position;
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
+            transform.position = teleportLocation2.transform.position;
         }
 
        if (collision.gameObject.tag == "Death3")
@@ -141,7 +167,8 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             gameController.UpdateLives();
             AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
-            transform.position = teleportLocation2.transform.position;
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
+            transform.position = teleportLocation3.transform.position;
         }
 
        if (collision.gameObject.tag == "BigDeath1")
@@ -149,6 +176,7 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             gameController.DecreaseLife();
             AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
             transform.position = gameController.spawnLocation.transform.position;
         }
 
@@ -157,6 +185,7 @@ public class CharacterMovement : MonoBehaviour
             Destroy(collision.gameObject);
             gameController.DecreaseLife();
             AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
             transform.position = teleportLocation1.transform.position;
 
         }
@@ -165,9 +194,10 @@ public class CharacterMovement : MonoBehaviour
         {
             gameController.WinGame();
             AudioSource.PlayClipAtPoint(winSound, Camera.main.transform.position, .45f);
+            AudioSource.PlayClipAtPoint(mainMusic, Camera.main.transform.position, 0f);
         }
 
-       if (collision.gameObject.tag == "Door1")
+       if (collision.gameObject.tag == "Gold")
         {
             transform.position = teleportLocation1.transform.position;
         }
@@ -175,6 +205,18 @@ public class CharacterMovement : MonoBehaviour
        if (collision.gameObject.tag == "Door2")
         {
             transform.position = teleportLocation2.transform.position;
+        }
+
+       if (collision.gameObject.tag == "Door3")
+        {
+            transform.position = teleportLocation3.transform.position;
+        }
+       
+       if (collision.gameObject.tag == "Secret")
+        {
+            spriteRenderer.color = Color.magenta;
+            AudioSource.PlayClipAtPoint(openSound, Camera.main.transform.position, .45f);
+            Destroy(collision.gameObject);
         }
     }
 }
