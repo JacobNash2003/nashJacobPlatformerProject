@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour
         Lives--;
         TextBoxL.text = "Lives: " + Lives;
         ResetGame();
-        if (Lives == 0)
+        if (Lives <= 0)
         {
             LoseGame();
             LoseLifeScreen.SetActive(false);
@@ -74,7 +74,7 @@ public class GameController : MonoBehaviour
         Lives -= 2;
         TextBoxL.text = "Lives: " + Lives;
         ResetGame();
-        if (Lives == 0)
+        if (Lives <= 0)
         {
             LoseGame();
             LoseLifeScreen.SetActive(false);
