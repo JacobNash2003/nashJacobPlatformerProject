@@ -3215,10 +3215,10 @@ MonoBehaviour:
   TextBoxT: {fileID: 1345174445}
   TextBoxL: {fileID: 143687587}
   TextBoxFT: {fileID: 1602325300}
-  winScreen: {fileID: 497700913}
-  loseScreen: {fileID: 1518536441}
-  loseLifeScreen: {fileID: 1432707291}
-  spawnLocation: {fileID: 702378338}
+  WinScreen: {fileID: 497700913}
+  LoseScreen: {fileID: 1518536441}
+  LoseLifeScreen: {fileID: 1432707291}
+  SpawnLocation: {fileID: 702378338}
   Character: {fileID: 446138041}
   Darkness: {fileID: 446191775}
 --- !u!1001 &410053321
@@ -10727,7 +10727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 34, y: -10.94}
+  m_AnchoredPosition: {x: 34, y: -10.939941}
   m_SizeDelta: {x: 291.892, y: 90.109}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1345174445

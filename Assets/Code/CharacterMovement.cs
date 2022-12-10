@@ -34,7 +34,7 @@ public class CharacterMovement : MonoBehaviour
         spriteRenderer = transform.GetComponent<SpriteRenderer>();
         boxCollider2d = GetComponent<BoxCollider2D>();
         LightTimer = 0f;
-        transform.position = gameController.spawnLocation.transform.position;
+        transform.position = gameController.SpawnLocation.transform.position;
         AudioSource.PlayClipAtPoint(MainMusic, transform.position, 0.70f);
     }
 
@@ -148,7 +148,7 @@ public class CharacterMovement : MonoBehaviour
             gameController.UpdateLives();
             AudioSource.PlayClipAtPoint(DeathSound, Camera.main.transform.position, .45f);
             AudioSource.PlayClipAtPoint(MainMusic, Camera.main.transform.position, 0f);
-            transform.position = gameController.spawnLocation.transform.position;
+            transform.position = gameController.SpawnLocation.transform.position;
         }
 
        if (collision.gameObject.tag == "Death1")

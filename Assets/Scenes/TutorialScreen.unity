@@ -1914,11 +1914,11 @@ MonoBehaviour:
   TextBoxT: {fileID: 1451758925}
   TextBoxL: {fileID: 1822439119}
   TextBoxFT: {fileID: 1451758925}
-  winScreen: {fileID: 1457102918}
-  loseScreen: {fileID: 536335754}
-  loseLifeScreen: {fileID: 1438118738}
-  spawnLocation: {fileID: 1617646924}
-  Character: {fileID: 0}
+  WinScreen: {fileID: 1457102918}
+  LoseScreen: {fileID: 536335754}
+  LoseLifeScreen: {fileID: 1438118738}
+  SpawnLocation: {fileID: 1617646924}
+  Character: {fileID: 974726323}
   Darkness: {fileID: 583896520}
 --- !u!4 &844849786
 Transform:
